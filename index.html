@@ -4,18 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI App Builder</title>
-   <meta name="description" content="AI App Builder lets you create web apps instantly using artificial intelligence. Fast, free, and simple for everyone.">
-  <meta name="google-site-verification" content="ploeaTjJit9mq2edr20_LNTr4tkIc4WGl6BGnTNXXLc" />
-</head>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style> 
-   
+  <style>
     :root {
       --primary: #6c63ff;
       --secondary: #ff7eb3;
       --dark: #2c2c54;
       --light: #f5f5f5;
-      --success: #4caf50;,1
+      --success: #4caf50;
       --warning: #ff9800;
       --danger: #f44336;
       --gradient: linear-gradient(135deg, #667eea, #764ba2);
@@ -37,7 +33,7 @@
     }
     
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
     }
     
@@ -69,6 +65,22 @@
       opacity: 0.7;
     }
     
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    @media (min-width: 992px) {
+      .main-content {
+        flex-direction: row;
+      }
+      
+      .input-section, .preview-section {
+        flex: 1;
+      }
+    }
+    
     .card {
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
@@ -76,11 +88,11 @@
       padding: 25px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.18);
-      margin-bottom: 20px;
     }
     
     .input-section {
-      margin-bottom: 30px;
+      display: flex;
+      flex-direction: column;
     }
     
     .prompt-container {
@@ -116,7 +128,6 @@
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
     }
     
     button {
@@ -133,6 +144,8 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
+      flex: 1;
+      min-width: 160px;
     }
     
     button:hover {
@@ -142,7 +155,6 @@
     
     button.generate {
       background: var(--primary);
-      flex: 1;
     }
     
     button.generate:hover {
@@ -151,7 +163,6 @@
     
     button.download {
       background: var(--success);
-      flex: 1;
     }
     
     button.download:hover {
@@ -160,11 +171,35 @@
     
     button.apk {
       background: #9c27b0;
-      flex: 1;
     }
     
     button.apk:hover {
       background: #7b1fa2;
+    }
+    
+    button.install {
+      background: var(--warning);
+      color: #333;
+    }
+    
+    button.install:hover {
+      background: #f57c00;
+      color: #fff;
+    }
+    
+    button.example {
+      background: var(--warning);
+      color: #333;
+    }
+    
+    button.example:hover {
+      background: #f57c00;
+      color: #fff;
+    }
+    
+    .preview-section {
+      display: flex;
+      flex-direction: column;
     }
     
     .preview-header {
@@ -190,9 +225,6 @@
       border-radius: 6px;
       font-size: 0.9rem;
       min-width: auto;
-      color: white;
-      border: none;
-      cursor: pointer;
     }
     
     .preview-btn:hover {
@@ -200,6 +232,7 @@
     }
     
     #preview {
+      flex: 1;
       background: #fff;
       border-radius: 12px;
       overflow: hidden;
@@ -211,7 +244,6 @@
       width: 100%;
       height: 100%;
       border: none;
-      min-height: 400px;
     }
     
     .loading {
@@ -242,8 +274,8 @@
     
     .examples-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
       margin-top: 20px;
     }
     
@@ -290,86 +322,59 @@
       opacity: 1;
     }
     
+    .download-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      color: #333;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+    }
+    
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
     .app-info {
       margin-top: 20px;
       text-align: left;
       background: rgba(255, 255, 255, 0.1);
       padding: 15px;
       border-radius: 12px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
     }
     
     .info-item {
       margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
     }
     
     .info-label {
       font-weight: 600;
-      margin-bottom: 5px;
-    }
-    
-    .countdown {
-      font-size: 2.5rem;
-      font-weight: bold;
-      color: var(--primary);
-      margin: 20px 0;
-    }
-    
-    .progress-container {
-      width: 100%;
-      height: 10px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      overflow: hidden;
-      margin: 20px 0;
-    }
-    
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: var(--primary);
-      border-radius: 10px;
-      transition: width 0.5s ease;
-    }
-    
-    .fast-generation {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 15px;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-    }
-    
-    .fast-badge {
-      background: var(--success);
-      color: white;
-      padding: 4px 8px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
-    
-    @media (max-width: 768px) {
-      .buttons {
-        flex-direction: column;
-      }
-      
-      .app-info {
-        grid-template-columns: 1fr;
-      }
-      
-      h1 {
-        font-size: 2rem;
-      }
-      
-      .examples-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      }
     }
   </style>
 </head>
@@ -379,18 +384,14 @@
       <div class="logo">🚀</div>
       <h1>AI App Builder</h1>
       <p class="subtitle">Create web apps with AI in seconds</p>
-      <div class="fast-generation">
-        <span class="fast-badge">10s Generation</span>
-        <span>Get your app in just 10 seconds!</span>
-      </div>
       <p class="author">Developed by Balu K.</p>
     </header>
     
-    <div class="card">
-      <div class="input-section">
+    <div class="main-content">
+      <div class="input-section card">
         <div class="prompt-container">
           <label for="prompt"><i class="fas fa-lightbulb"></i> Describe your app</label>
-          <textarea id="prompt" placeholder="e.g. Create a todo list app with add, edit, and delete functionality..."></textarea>
+          <textarea id="prompt" placeholder="e.g. Create a todo list app with add, edit, and delete functionality, with a dark mode option..."></textarea>
         </div>
         
         <div class="buttons">
@@ -398,38 +399,46 @@
             <i class="fas fa-magic"></i> Generate App
           </button>
           <button class="download" onclick="downloadApp()">
-            <i class="fas fa-download"></i> Download
+            <i class="fas fa-download"></i> Download HTML
           </button>
-          <button class="apk" onclick="downloadAPK()">
+          <button class="apk" onclick="showApkModal()">
             <i class="fas fa-mobile-alt"></i> Download APK
           </button>
-        </div>
-        
-     
-          </div>
+          <button class="install" onclick="installApp()">
+            <i class="fas fa-plus-circle"></i> Install Web App
+          </button>
         </div>
         
         <div class="app-info">
+          <h3><i class="fas fa-info-circle"></i> App Information</h3>
           <div class="info-item">
-            <div class="info-label">App Name:</div>
-            <div id="app-name">Not generated yet</div>
+            <span class="info-label">App Name:</span>
+            <span id="app-name">Not generated yet</span>
           </div>
           <div class="info-item">
-            <div class="info-label">Version:</div>
-            <div id="app-version">1.0.0</div>
+            <span class="info-label">Version:</span>
+            <span id="app-version">1.0.0</span>
           </div>
           <div class="info-item">
-            <div class="info-label">Size:</div>
-            <div id="app-size">-</div>
+            <span class="info-label">Size:</span>
+            <span id="app-size">-</span>
           </div>
-          <div class="info-item">
-            <div class="info-label">Generation Time:</div>
-            <div id="generation-time">-</div>
+        </div>
+        
+        <div class="examples">
+          <p style="margin: 20px 0 10px; text-align: left;">Try these examples:</p>
+          <div class="examples-grid">
+            <div class="example-chip" onclick="insertExample('Calculator with modern UI')">Calculator</div>
+            <div class="example-chip" onclick="insertExample('Countdown timer with progress bar')">Countdown Timer</div>
+            <div class="example-chip" onclick="insertExample('Quiz app with multiple choice')">Quiz App</div>
+            <div class="example-chip" onclick="insertExample('Weather app with mock data')">Weather App</div>
+            <div class="example-chip" onclick="insertExample('Drawing app with color picker')">Drawing App</div>
+            <div class="example-chip" onclick="insertExample('Note taking app with local storage')">Notes App</div>
           </div>
         </div>
       </div>
       
-      <div class="preview-section">
+      <div class="preview-section card">
         <div class="preview-header">
           <div class="preview-title"><i class="fas fa-eye"></i> Live Preview</div>
           <div class="preview-actions">
@@ -449,17 +458,38 @@
     </div>
     
     <footer>
-      <p>Powered by ai 2025 • Made with ❤️ for developers</p>
+      <p>Powered by AI 2025 • Made with ❤️ for developers</p>
     </footer>
   </div>
 
   <div class="notification" id="notification">App downloaded successfully!</div>
 
+  <div class="modal" id="apkModal">
+    <div class="modal-content">
+      <h2><i class="fas fa-mobile-alt"></i> Download APK</h2>
+      <p>To generate an APK file for your app, we need to package it for Android. This process may take a few minutes.</p>
+      
+      <div class="download-options">
+        <button class="apk" onclick="generateAPK('basic')">
+          <i class="fas fa-mobile-alt"></i> Basic APK
+        </button>
+        <button class="apk" onclick="generateAPK('advanced')">
+          <i class="fas fa-star"></i> Advanced APK
+        </button>
+      </div>
+      
+      <div class="modal-buttons">
+        <button class="download-btn" onclick="closeModal('apkModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    const API_KEY = "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";
+    const API_URL = "https://openrouter.ai/api/v1/chat/completions";
     let lastGeneratedHTML = "";
     let isGenerating = false;
-    let generationStartTime = 0;
-    let countdownInterval = null;
+    let deferredPrompt = null;
 
     // Initialize the preview with a welcome message
     function initPreview() {
@@ -482,58 +512,63 @@
 
       if (isGenerating) return;
       isGenerating = true;
-      generationStartTime = Date.now();
 
-      // Show loading state in preview with countdown
+      // Show loading state in preview
       const preview = document.getElementById('preview');
       preview.innerHTML = `
         <div class="loading">
-          <div class="countdown" id="countdown">2s</div>
-          <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-          </div>
-          <p>Generating your app at lightning speed!</p>
-          <p style="font-size: 0.9rem; margin-top: 10px;">This will take just 2 seconds</p>
+          <div class="spinner"></div>
+          <p>Generating your app...</p>
+          <p style="font-size: 0.9rem; margin-top: 10px;">This may take a few moments</p>
         </div>
       `;
 
-      // Start countdown from 2 seconds
-      let timeLeft = 2s;
-      const countdownElement = document.getElementById('countdown');
-      const progressBar = document.getElementById('progress-bar');
-      
-      if (countdownInterval) clearInterval(countdownInterval);
-      
-      countdownInterval = setInterval(() => {
-        timeLeft--;
-        countdownElement.textContent = `${timeLeft}s`;
-        progressBar.style.width = `${(10 - timeLeft) * 10}%`;
-        
-        if (timeLeft <= 0) {
-          clearInterval(countdownInterval);
-        }
-      }, 1000);
-
       try {
-        // Simulate API call with timeout
-        const htmlCode = await generateAppCode(userPrompt);
-        
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${API_KEY}`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": window.location.href,
+            "X-Title": "AI App Builder"
+          },
+          body: JSON.stringify({
+            model: "deepseek/deepseek-chat",
+            messages: [
+              {
+                role: "system",
+                content: "You are an expert web developer. Generate clean, modern HTML/CSS/JS code for the requested app. Include responsive design and smooth interactions. Only return the HTML code with embedded CSS and JS, no explanations or markdown formatting."
+              },
+              {
+                role: "user",
+                content: `Create a web app with this functionality: ${userPrompt}. 
+                          Make it visually appealing with modern UI design.
+                          Include all necessary HTML, CSS, and JavaScript in a single file.
+                          Use responsive design that works on mobile and desktop.`
+              }
+            ]
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`API request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        let htmlCode = data.choices?.[0]?.message?.content || "<h2>Error: No output generated</h2>";
+
+        // Clean markdown if present
+        htmlCode = htmlCode.replace(/```html|```/g, "").trim();
+
         // Save for download
         lastGeneratedHTML = htmlCode;
-
-        // Calculate generation time
-        const generationTime = ((Date.now() - generationStartTime) / 1000).toFixed(1);
-        document.getElementById('generation-time').textContent = `${generationTime} seconds`;
 
         // Update app info
         updateAppInfo(userPrompt, htmlCode);
 
         // Show in preview
         const iframe = document.createElement('iframe');
-        iframe.onload = () => { 
-          isGenerating = false;
-          clearInterval(countdownInterval);
-        };
+        iframe.onload = () => { isGenerating = false; };
         preview.innerHTML = '';
         preview.appendChild(iframe);
         
@@ -542,7 +577,7 @@
         iframeDoc.write(htmlCode);
         iframeDoc.close();
 
-        showNotification(`App generated successfully in ${generationTime} seconds!`, "success");
+        showNotification("App generated successfully!", "success");
 
       } catch (err) {
         console.error("Generation error:", err);
@@ -554,47 +589,8 @@
           </div>
         `;
         isGenerating = false;
-        clearInterval(countdownInterval);
         showNotification("Error generating app. Please try again.", "error");
       }
-    }
-
-    // Simulated app generation that takes exactly 2 seconds
-    function generateAppCode(prompt) {
-      return new Promise((resolve) => {
-        // Pre-defined app templates for different types of apps
-        const appTemplates = {
-          todo: generateTodoApp,
-          calculator: generateCalculatorApp,
-          timer: generateTimerApp,
-          quiz: generateQuizApp,
-          weather: generateWeatherApp,
-          drawing: generateDrawingApp,
-          notes: generateNotesApp
-        };
-        
-        // Determine which template to use based on prompt
-        let selectedTemplate = "todo";
-        
-        if (prompt.toLowerCase().includes("calculat")) {
-          selectedTemplate = "calculator";
-        } else if (prompt.toLowerCase().includes("timer") || prompt.toLowerCase().includes("countdown")) {
-          selectedTemplate = "timer";
-        } else if (prompt.toLowerCase().includes("quiz")) {
-          selectedTemplate = "quiz";
-        } else if (prompt.toLowerCase().includes("weather")) {
-          selectedTemplate = "weather";
-        } else if (prompt.toLowerCase().includes("draw")) {
-          selectedTemplate = "drawing";
-        } else if (prompt.toLowerCase().includes("note")) {
-          selectedTemplate = "notes";
-        }
-        
-        // Wait for 2 seconds then resolve with the appropriate template
-        setTimeout(() => {
-          resolve(appTemplates[selectedTemplate]());
-        }, 10000);
-      });
     }
 
     function updateAppInfo(prompt, htmlCode) {
@@ -627,43 +623,96 @@
       showNotification("App downloaded successfully!", "success");
     }
 
-    function downloadAPK() {
+    function showApkModal() {
       if (!lastGeneratedHTML) {
         showNotification("Generate an app first before creating APK!", "warning");
         return;
       }
       
-      // Simulate APK download
-      showNotification("Preparing APK for download...", "info");
+      document.getElementById('apkModal').style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    function generateAPK(type) {
+      showNotification("APK generation started. This may take a while...", "success");
       
+      // Simulate APK generation process
       setTimeout(() => {
-        const blob = new Blob(["Simulated APK file content"], { type: "application/vnd.android.package-archive" });
+        closeModal('apkModal');
+        
+        // In a real implementation, this would download the actual APK
+        // For demonstration, we'll create a dummy download
+        const blob = new Blob([lastGeneratedHTML], { type: "application/vnd.android.package-archive" });
         const url = URL.createObjectURL(blob);
         
         const a = document.createElement("a");
         a.href = url;
-        a.download = "ai-app-builder.apk";
+        a.download = type === 'advanced' ? "app-advanced.apk" : "app-basic.apk";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         
         URL.revokeObjectURL(url);
         showNotification("APK downloaded successfully!", "success");
-      }, 1500);
+      }, 3000);
     }
+
+    function installApp() {
+      if (!lastGeneratedHTML) {
+        showNotification("Generate an app first before installing!", "warning");
+        return;
+      }
+      
+      if (deferredPrompt) {
+        // Show the install prompt
+        deferredPrompt.prompt();
+        
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            showNotification('App installed successfully!', 'success');
+          } else {
+            showNotification('App installation cancelled', 'warning');
+          }
+          deferredPrompt = null;
+        });
+      } else {
+        showNotification("To install the app, use the browser's 'Add to Home Screen' feature.", "info");
+      }
+    }
+
+    // Listen for beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent the mini-infobar from appearing on mobile
+      e.preventDefault();
+      // Stash the event so it can be triggered later
+      deferredPrompt = e;
+    });
 
     function insertExample(exampleText) {
       const examples = {
-        'Calculator': 'Create a calculator with a modern UI design that supports basic arithmetic operations.',
-        'Countdown timer': 'Build a countdown timer where users can set a time and see progress.',
-        'Quiz app': 'Develop a quiz app that shows questions and tracks score.',
-        'Weather app': 'Design a weather app UI that displays current temperature and conditions.',
-        'Drawing app': 'Create a simple drawing app with color options.',
-        'Notes app': 'Build a note-taking app that allows users to create and manage notes.'
+        'Calculator with modern UI': 'Create a calculator with a modern glass UI design that supports basic arithmetic operations (add, subtract, multiply, divide) with a dark/light mode toggle.',
+        'Countdown timer with progress bar': 'Build a countdown timer where users can set a time, see a circular progress bar, and get notified when time is up with sound.',
+        'Quiz app with multiple choice': 'Develop a quiz app that shows one question at a time, tracks score, and shows results at the end with the option to restart.',
+        'Weather app with mock data': 'Design a weather app UI that displays current temperature, conditions, and 5-day forecast using mock data for a few cities.',
+        'Drawing app with color picker': 'Create a simple drawing app with a color picker, brush size slider, and clear canvas functionality.',
+        'Note taking app with local storage': 'Build a note-taking app that allows users to create, edit, delete and persist notes using local storage with a clean card-based UI.'
       };
       
       const textarea = document.getElementById('prompt');
-      textarea.value = examples[exampleText] || exampleText;
+      
+      if (exampleText) {
+        textarea.value = examples[exampleText] || exampleText;
+      } else {
+        // If no specific example provided, use a random one
+        const exampleKeys = Object.keys(examples);
+        const randomExample = exampleKeys[Math.floor(Math.random() * exampleKeys.length)];
+        textarea.value = examples[randomExample];
+      }
+      
       textarea.focus();
     }
 
@@ -716,134 +765,8 @@
       }, 3000);
     }
 
-    // App template generators
-    function generateTodoApp() {
-      return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todo List App</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    body {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: #333;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 16px;
-      padding: 25px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    }
-    
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #6c63ff;
-    }
-    
-    .input-section {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    
-    input {
-      flex: 1;
-      padding: 12px 15px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    
-    button {
-      padding: 12px 20px;
-      background: #6c63ff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    
-    button:hover {
-      background: #5a52e0;
-    }
-    
-    ul {
-      list-style: none;
-    }
-    
-    li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 15px;
-      background: #f5f5f5;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-    
-    .delete-btn {
-      background: #ff7eb3;
-      padding: 6px 12px;
-      font-size: 0.9rem;
-    }
-    
-    .delete-btn:hover {
-      background: #ff5277;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Todo List</h1>
-    <div class="input-section">
-      <input type="text" id="taskInput" placeholder="Enter a new task...">
-      <button onclick="addTask()">Add Task</button>
-    </div>
-    <ul id="taskList"></ul>
-  </div>
-
-  <script>
-    function addTask() {
-      const taskInput = document.getElementById('taskInput');
-      const taskText = taskInput.value.trim();
-      
-      if (taskText === '') return;
-      
-      const taskList = document.getElementById('taskList');
-      const li = document.createElement('li');
-      
-      li.innerHTML = \`
-        <span>\${taskText}</span>
-        <button class="delete-btn" onclick="this.parentElement.remove()">Delete</button>
-      \`;
-      
-      taskList.appendChild(li);
-      taskInput.value = '';
-      taskInput.focus();
-    }
-    
-    // Allow adding task with Enter key
-    document.getElementById('taskInput').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        addTask();
-      }
-    });
+    // Initialize the preview on load
+    window.onload = initPreview;
   </script>
 </body>
 </html>
