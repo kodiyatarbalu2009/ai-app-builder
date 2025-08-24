@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI App Builder</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6c63ff;
+      --secondary: #ff7eb3;
+      --dark: #2c2c54;
+      --light: #f5f5f5;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --gradient: linear-gradient(135deg, #667eea, #764ba2);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--gradient);
+      color: var(--light);
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+    }
+    
+    .logo {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    
+    .author {
+      margin-top: 5px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+    
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      margin-bottom: 20px;
+    }
+    
+    .input-section {
+      margin-bottom: 30px;
+    }
+    
+    .prompt-container {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 15px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      resize: vertical;
+      transition: box-shadow 0.3s ease;
+    }
+    
+    textarea:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.3);
+    }
+    
+    .buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--primary);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    button.generate {
+      background: var(--primary);
+      flex: 1;
+    }
+    
+    button.generate:hover {
+      background: #5a52e0;
+    }
+    
+    button.download {
+      background: var(--success);
+      flex: 1;
+    }
+    
+    button.download:hover {
+      background: #43a047;
+    }
+    
+    button.apk {
+      background: #9c27b0;
+      flex: 1;
+    }
+    
+    button.apk:hover {
+      background: #7b1fa2;
+    }
+    
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .preview-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+    
+    .preview-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .preview-btn {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      min-width: auto;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .preview-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    #preview {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      min-height: 400px;
+    }
+    
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      min-height: 400px;
+    }
+    
+    .loading {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding: 40px;
+      color: #666;
+      text-align: center;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(108, 99, 255, 0.2);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .example-chip {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 10px 15px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    
+    .example-chip:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+    
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: 8px;
+      background: var(--success);
+      color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .app-info {
+      margin-top: 20px;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    
+    .info-item {
+      margin-bottom: 10px;
+    }
+    
+    .info-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .countdown {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin: 20px 0;
+    }
+    
+    .progress-container {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      border-radius: 10px;
+      transition: width 0.5s ease;
+    }
+    
+    .fast-generation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+    
+    .fast-badge {
+      background: var(--success);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    
+    @media (max-width: 768px) {
+      .buttons {
+        flex-direction: column;
+      }
+      
+      .app-info {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .examples-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">🚀</div>
+      <h1>AI App Builder</h1>
+      <p class="subtitle">Create web apps with AI in seconds</p>
+      <div class="fast-generation">
+        <span class="fast-badge">10s Generation</span>
+        <span>Get your app in just 10 seconds!</span>
+      </div>
+      <p class="author">Developed by Balu K.</p>
+    </header>
+    
+    <div class="card">
+      <div class="input-section">
+        <div class="prompt-container">
+          <label for="prompt"><i class="fas fa-lightbulb"></i> Describe your app</label>
+          <textarea id="prompt" placeholder="e.g. Create a todo list app with add, edit, and delete functionality..."></textarea>
+        </div>
+        
+        <div class="buttons">
+          <button class="generate" onclick="generateApp()">
+            <i class="fas fa-magic"></i> Generate App
+          </button>
+          <button class="download" onclick="downloadApp()">
+            <i class="fas fa-download"></i> Download
+          </button>
+          <button class="apk" onclick="downloadAPK()">
+            <i class="fas fa-mobile-alt"></i> Download APK
+          </button>
+        </div>
+        
+     
+          </div>
+        </div>
+        
+        <div class="app-info">
+          <div class="info-item">
+            <div class="info-label">App Name:</div>
+            <div id="app-name">Not generated yet</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Version:</div>
+            <div id="app-version">1.0.0</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Size:</div>
+            <div id="app-size">-</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Generation Time:</div>
+            <div id="generation-time">-</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="preview-section">
+        <div class="preview-header">
+          <div class="preview-title"><i class="fas fa-eye"></i> Live Preview</div>
+          <div class="preview-actions">
+            <button class="preview-btn" onclick="refreshPreview()"><i class="fas fa-sync-alt"></i></button>
+            <button class="preview-btn" onclick="expandPreview()"><i class="fas fa-expand"></i></button>
+          </div>
+        </div>
+        
+        <div id="preview">
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Your app preview will appear here</p>
+            <p style="font-size: 0.9rem; margin-top: 10px;">Describe your app idea and click Generate</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <footer>
+      <p>Powered by ai 2025 • Made with ❤️ for developers</p>
+    </footer>
+  </div>
+
+  <div class="notification" id="notification">App downloaded successfully!</div>
+
+  <script>
+    let lastGeneratedHTML = "";
+    let isGenerating = false;
+    let generationStartTime = 0;
+    let countdownInterval = null;
+
+    // Initialize the preview with a welcome message
+    function initPreview() {
+      const preview = document.getElementById('preview');
+      preview.innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Your app preview will appear here</p>
+          <p style="font-size: 0.9rem; margin-top: 10px;">Describe your app idea and click Generate</p>
+        </div>
+      `;
+    }
+
+    async function generateApp() {
+      const userPrompt = document.getElementById("prompt").value.trim();
+      if (!userPrompt) {
+        showNotification("Please enter an app idea first!", "warning");
+        return;
+      }
+
+      if (isGenerating) return;
+      isGenerating = true;
+      generationStartTime = Date.now();
+
+      // Show loading state in preview with countdown
+      const preview = document.getElementById('preview');
+      preview.innerHTML = `
+        <div class="loading">
+          <div class="countdown" id="countdown">2s</div>
+          <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+          </div>
+          <p>Generating your app at lightning speed!</p>
+          <p style="font-size: 0.9rem; margin-top: 10px;">This will take just 2 seconds</p>
+        </div>
+      `;
+
+      // Start countdown from 2 seconds
+      let timeLeft = 2s;
+      const countdownElement = document.getElementById('countdown');
+      const progressBar = document.getElementById('progress-bar');
+      
+      if (countdownInterval) clearInterval(countdownInterval);
+      
+      countdownInterval = setInterval(() => {
+        timeLeft--;
+        countdownElement.textContent = `${timeLeft}s`;
+        progressBar.style.width = `${(10 - timeLeft) * 10}%`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+        }
+      }, 1000);
+
+      try {
+        // Simulate API call with timeout
+        const htmlCode = await generateAppCode(userPrompt);
+        
+        // Save for download
+        lastGeneratedHTML = htmlCode;
+
+        // Calculate generation time
+        const generationTime = ((Date.now() - generationStartTime) / 1000).toFixed(1);
+        document.getElementById('generation-time').textContent = `${generationTime} seconds`;
+
+        // Update app info
+        updateAppInfo(userPrompt, htmlCode);
+
+        // Show in preview
+        const iframe = document.createElement('iframe');
+        iframe.onload = () => { 
+          isGenerating = false;
+          clearInterval(countdownInterval);
+        };
+        preview.innerHTML = '';
+        preview.appendChild(iframe);
+        
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(htmlCode);
+        iframeDoc.close();
+
+        showNotification(`App generated successfully in ${generationTime} seconds!`, "success");
+
+      } catch (err) {
+        console.error("Generation error:", err);
+        preview.innerHTML = `
+          <div class="loading">
+            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--danger); margin-bottom: 20px;"></i>
+            <p>Error generating app</p>
+            <p style="font-size: 0.9rem; margin-top: 10px;">${err.message || "Please try again"}</p>
+          </div>
+        `;
+        isGenerating = false;
+        clearInterval(countdownInterval);
+        showNotification("Error generating app. Please try again.", "error");
+      }
+    }
+
+    // Simulated app generation that takes exactly 2 seconds
+    function generateAppCode(prompt) {
+      return new Promise((resolve) => {
+        // Pre-defined app templates for different types of apps
+        const appTemplates = {
+          todo: generateTodoApp,
+          calculator: generateCalculatorApp,
+          timer: generateTimerApp,
+          quiz: generateQuizApp,
+          weather: generateWeatherApp,
+          drawing: generateDrawingApp,
+          notes: generateNotesApp
+        };
+        
+        // Determine which template to use based on prompt
+        let selectedTemplate = "todo";
+        
+        if (prompt.toLowerCase().includes("calculat")) {
+          selectedTemplate = "calculator";
+        } else if (prompt.toLowerCase().includes("timer") || prompt.toLowerCase().includes("countdown")) {
+          selectedTemplate = "timer";
+        } else if (prompt.toLowerCase().includes("quiz")) {
+          selectedTemplate = "quiz";
+        } else if (prompt.toLowerCase().includes("weather")) {
+          selectedTemplate = "weather";
+        } else if (prompt.toLowerCase().includes("draw")) {
+          selectedTemplate = "drawing";
+        } else if (prompt.toLowerCase().includes("note")) {
+          selectedTemplate = "notes";
+        }
+        
+        // Wait for 2 seconds then resolve with the appropriate template
+        setTimeout(() => {
+          resolve(appTemplates[selectedTemplate]());
+        }, 10000);
+      });
+    }
+
+    function updateAppInfo(prompt, htmlCode) {
+      // Extract app name from prompt
+      const appName = prompt.length > 20 ? prompt.substring(0, 20) + "..." : prompt;
+      document.getElementById('app-name').textContent = appName;
+      
+      // Calculate app size
+      const sizeInKB = (new Blob([htmlCode]).size / 1024).toFixed(2);
+      document.getElementById('app-size').textContent = `${sizeInKB} KB`;
+    }
+
+    function downloadApp() {
+      if (!lastGeneratedHTML) {
+        showNotification("Generate an app first before downloading!", "warning");
+        return;
+      }
+      
+      const blob = new Blob([lastGeneratedHTML], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ai-app.html";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      URL.revokeObjectURL(url);
+      showNotification("App downloaded successfully!", "success");
+    }
+
+    function downloadAPK() {
+      if (!lastGeneratedHTML) {
+        showNotification("Generate an app first before creating APK!", "warning");
+        return;
+      }
+      
+      // Simulate APK download
+      showNotification("Preparing APK for download...", "info");
+      
+      setTimeout(() => {
+        const blob = new Blob(["Simulated APK file content"], { type: "application/vnd.android.package-archive" });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "ai-app-builder.apk";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        URL.revokeObjectURL(url);
+        showNotification("APK downloaded successfully!", "success");
+      }, 1500);
+    }
+
+    function insertExample(exampleText) {
+      const examples = {
+        'Calculator': 'Create a calculator with a modern UI design that supports basic arithmetic operations.',
+        'Countdown timer': 'Build a countdown timer where users can set a time and see progress.',
+        'Quiz app': 'Develop a quiz app that shows questions and tracks score.',
+        'Weather app': 'Design a weather app UI that displays current temperature and conditions.',
+        'Drawing app': 'Create a simple drawing app with color options.',
+        'Notes app': 'Build a note-taking app that allows users to create and manage notes.'
+      };
+      
+      const textarea = document.getElementById('prompt');
+      textarea.value = examples[exampleText] || exampleText;
+      textarea.focus();
+    }
+
+    function refreshPreview() {
+      if (lastGeneratedHTML) {
+        const preview = document.getElementById('preview');
+        const iframe = preview.querySelector('iframe');
+        
+        if (iframe) {
+          const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+          iframeDoc.open();
+          iframeDoc.write(lastGeneratedHTML);
+          iframeDoc.close();
+          showNotification("Preview refreshed", "success");
+        }
+      }
+    }
+
+    function expandPreview() {
+      const preview = document.getElementById('preview');
+      
+      if (preview.requestFullscreen) {
+        preview.requestFullscreen();
+      } else if (preview.webkitRequestFullscreen) {
+        preview.webkitRequestFullscreen();
+      } else if (preview.msRequestFullscreen) {
+        preview.msRequestFullscreen();
+      }
+    }
+
+    function showNotification(message, type = "success") {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      
+      // Set background color based on type
+      if (type === "error") {
+        notification.style.background = "var(--danger)";
+      } else if (type === "warning") {
+        notification.style.background = "var(--warning)";
+      } else if (type === "info") {
+        notification.style.background = "#2196f3";
+      } else {
+        notification.style.background = "var(--success)";
+      }
+      
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    // App template generators
+    function generateTodoApp() {
+      return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List App</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #333;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #6c63ff;
+    }
+    
+    .input-section {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    
+    button {
+      padding: 12px 20px;
+      background: #6c63ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
+    button:hover {
+      background: #5a52e0;
+    }
+    
+    ul {
+      list-style: none;
+    }
+    
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    
+    .delete-btn {
+      background: #ff7eb3;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+    }
+    
+    .delete-btn:hover {
+      background: #ff5277;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Todo List</h1>
+    <div class="input-section">
+      <input type="text" id="taskInput" placeholder="Enter a new task...">
+      <button onclick="addTask()">Add Task</button>
+    </div>
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    function addTask() {
+      const taskInput = document.getElementById('taskInput');
+      const taskText = taskInput.value.trim();
+      
+      if (taskText === '') return;
+      
+      const taskList = document.getElementById('taskList');
+      const li = document.createElement('li');
+      
+      li.innerHTML = \`
+        <span>\${taskText}</span>
+        <button class="delete-btn" onclick="this.parentElement.remove()">Delete</button>
+      \`;
+      
+      taskList.appendChild(li);
+      taskInput.value = '';
+      taskInput.focus();
+    }
+    
+    // Allow adding task with Enter key
+    document.getElementById('taskInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        addTask();
+      }
+    });
+  </script>
+</body>
+</html>
